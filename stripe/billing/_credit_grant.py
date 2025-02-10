@@ -116,6 +116,10 @@ class CreditGrant(
         """
         A descriptive name shown in the Dashboard.
         """
+        priority: NotRequired[int]
+        """
+        The desired priority for applying this credit grant. If not specified, it will be set to the default value of 50. The highest priority is 0 and the lowest is 100.
+        """
 
     class CreateParamsAmount(TypedDict):
         monetary: NotRequired["CreditGrant.CreateParamsAmountMonetary"]
@@ -256,6 +260,10 @@ class CreditGrant(
     object: Literal["billing.credit_grant"]
     """
     String representing the object's type. Objects of the same type share the same value.
+    """
+    priority: Optional[int]
+    """
+    The priority for applying this credit grant. The highest priority is 0 and the lowest is 100.
     """
     test_clock: Optional[ExpandableField["TestClock"]]
     """
