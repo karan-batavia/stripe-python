@@ -405,7 +405,7 @@ class PaymentAttemptRecord(ListableAPIResource["PaymentAttemptRecord"]):
     """
     Information about the Payment Method debited for this payment.
     """
-    payment_record: str
+    payment_record: Optional[str]
     """
     ID of the Payment Record this Payment Attempt Record belongs to.
     """

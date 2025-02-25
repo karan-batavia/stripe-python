@@ -812,7 +812,7 @@ class PaymentRecord(APIResource["PaymentRecord"]):
     """
     Unique identifier for the object.
     """
-    latest_payment_attempt_record: str
+    latest_payment_attempt_record: Optional[str]
     """
     ID of the latest Payment Attempt Record attached to this Payment Record.
     """
