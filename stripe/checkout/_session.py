@@ -146,22 +146,10 @@ class Session(
                 State, county, province, or region.
                 """
 
-            address: Optional[Address]
-            carrier: Optional[str]
+            address: Address
+            name: str
             """
-            The delivery service that shipped a physical product, such as Fedex, UPS, USPS, etc.
-            """
-            name: Optional[str]
-            """
-            Recipient name.
-            """
-            phone: Optional[str]
-            """
-            Recipient phone (including extension).
-            """
-            tracking_number: Optional[str]
-            """
-            The tracking number for a physical product, obtained from the delivery service. If multiple tracking numbers were generated for this purchase, please separate them with commas.
+            Customer name.
             """
             _inner_class_types = {"address": Address}
 
@@ -4748,7 +4736,7 @@ class Session(
 
         To update an existing line item, specify its `id` along with the new values of the fields to update.
 
-        To add a new line item, specify a `price` and `quantity`. We don't currently support recurring prices.
+        To add a new line item, specify a `price` and `quantity`.
 
         To remove an existing line item, omit the line item's ID from the retransmitted array.
 

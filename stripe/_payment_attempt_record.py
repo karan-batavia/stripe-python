@@ -124,6 +124,140 @@ class PaymentAttemptRecord(ListableAPIResource["PaymentAttemptRecord"]):
             """
             _inner_class_types = {"address": Address}
 
+        class Card(StripeObject):
+            class Checks(StripeObject):
+                address_line1_check: Optional[
+                    Literal["fail", "pass", "unavailable", "unchecked"]
+                ]
+                address_postal_code_check: Optional[
+                    Literal["fail", "pass", "unavailable", "unchecked"]
+                ]
+                cvc_check: Optional[
+                    Literal["fail", "pass", "unavailable", "unchecked"]
+                ]
+
+            class NetworkToken(StripeObject):
+                used: bool
+
+            class ThreeDSecure(StripeObject):
+                authentication_flow: Optional[
+                    Literal["challenge", "frictionless"]
+                ]
+                result: Optional[
+                    Literal[
+                        "attempt_acknowledged",
+                        "authenticated",
+                        "exempted",
+                        "failed",
+                        "not_supported",
+                        "processing_error",
+                    ]
+                ]
+                result_reason: Optional[
+                    Literal[
+                        "abandoned",
+                        "bypassed",
+                        "canceled",
+                        "card_not_enrolled",
+                        "network_not_supported",
+                        "protocol_error",
+                        "rejected",
+                    ]
+                ]
+                version: Optional[Literal["1.0.2", "2.1.0", "2.2.0"]]
+
+            brand: Literal[
+                "amex",
+                "cartes_bancaires",
+                "diners",
+                "discover",
+                "eftpos_au",
+                "interac",
+                "jcb",
+                "link",
+                "mastercard",
+                "unionpay",
+                "unknown",
+                "visa",
+            ]
+            """
+            Card brand. Can be `amex`, `diners`, `discover`, `eftpos_au`, `jcb`, `link`, `mastercard`, `unionpay`, `visa`, or `unknown`.
+            """
+            capture_before: Optional[int]
+            """
+            When using manual capture, a future timestamp at which the charge will be automatically refunded if uncaptured.
+            """
+            checks: Optional[Checks]
+            """
+            Check results by Card networks on Card address and CVC at time of payment.
+            """
+            country: Optional[str]
+            """
+            Two-letter ISO code representing the country of the card. You could use this attribute to get a sense of the international breakdown of cards you've collected.
+            """
+            exp_month: int
+            """
+            Two-digit number representing the card's expiration month.
+            """
+            exp_year: int
+            """
+            Four-digit number representing the card's expiration year.
+            """
+            fingerprint: Optional[str]
+            """
+            Uniquely identifies this particular card number. You can use this attribute to check whether two customers who've signed up with you are using the same card number, for example. For payment methods that tokenize card information (Apple Pay, Google Pay), the tokenized number might be provided instead of the underlying card number.
+
+            *As of May 1, 2021, card fingerprint in India for Connect changed to allow two fingerprints for the same card---one for India and one for the rest of the world.*
+            """
+            funding: Literal["credit", "debit", "prepaid", "unknown"]
+            """
+            Card funding type. Can be `credit`, `debit`, `prepaid`, or `unknown`.
+            """
+            last4: str
+            """
+            The last four digits of the card.
+            """
+            moto: Optional[bool]
+            """
+            True if this payment was marked as MOTO and out of scope for SCA.
+            """
+            network: Optional[
+                Literal[
+                    "amex",
+                    "cartes_bancaires",
+                    "diners",
+                    "discover",
+                    "eftpos_au",
+                    "interac",
+                    "jcb",
+                    "link",
+                    "mastercard",
+                    "unionpay",
+                    "unknown",
+                    "visa",
+                ]
+            ]
+            """
+            Identifies which network this charge was processed on. Can be `amex`, `cartes_bancaires`, `diners`, `discover`, `eftpos_au`, `interac`, `jcb`, `link`, `mastercard`, `unionpay`, `visa`, or `unknown`.
+            """
+            network_token: Optional[NetworkToken]
+            """
+            If this card has network token credentials, this contains the details of the network token credentials.
+            """
+            network_transaction_id: Optional[str]
+            """
+            This is used by the financial networks to identify a transaction. Visa calls this the Transaction ID, Mastercard calls this the Trace ID, and American Express calls this the Acquirer Reference Data. This value will be present if it is returned by the financial network in the authorization response, and null otherwise.
+            """
+            three_d_secure: Optional[ThreeDSecure]
+            """
+            Populated if this transaction used 3D Secure authentication.
+            """
+            _inner_class_types = {
+                "checks": Checks,
+                "network_token": NetworkToken,
+                "three_d_secure": ThreeDSecure,
+            }
+
         class Custom(StripeObject):
             display_name: str
             """
@@ -138,20 +272,27 @@ class PaymentAttemptRecord(ListableAPIResource["PaymentAttemptRecord"]):
         """
         The billing details associated with the method of payment.
         """
+        card: Optional[Card]
+        """
+        Details of the card used for this payment attempt.
+        """
         custom: Optional[Custom]
         """
-        Information about the custom (user-defined) payment method used to make this payment.
+        Custom Payment Methods represent Payment Method types not modeled directly in
+        the Stripe API. This resource consists of details about the custom payment method
+        used for this payment attempt.
         """
         payment_method: Optional[str]
         """
         ID of the Stripe PaymentMethod used to make this payment.
         """
-        type: Literal["custom"]
+        type: Literal["card", "custom"]
         """
         The type of Payment Method used for this payment attempt.
         """
         _inner_class_types = {
             "billing_details": BillingDetails,
+            "card": Card,
             "custom": Custom,
         }
 
