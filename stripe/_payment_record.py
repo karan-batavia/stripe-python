@@ -284,7 +284,7 @@ class PaymentRecord(APIResource["PaymentRecord"]):
         """
         ID of the Stripe PaymentMethod used to make this payment.
         """
-        type: Literal["card", "custom"]
+        type: str
         """
         The type of Payment Method used for this payment attempt.
         """
